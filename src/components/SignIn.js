@@ -1,3 +1,7 @@
 export default function SignIn() {
-    return;
+    return (
+        <h1>
+            LOGIN
+        </h1>
+    );
 };
