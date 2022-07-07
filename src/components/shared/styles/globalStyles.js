@@ -49,7 +49,7 @@ const GlobalStyle = createGlobalStyle`
     //FIM RESET CSS
 
     body {
-        background: #8C11BE;
+        background: #FFFFFF;
         font-family: Roboto, "Open Sans", sans-serif;
         display: flex;
         justify-content: center;

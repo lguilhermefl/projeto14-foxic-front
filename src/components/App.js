@@ -3,18 +3,17 @@ import GlobalStyle from "./shared/styles/globalStyles.js";
 
 import Home from "./Home";
 import SignIn from "./SignIn";
-import SignUp from "./SignUp";
+import SignUp from "./SignUp.js";
 
 export default function App() {
     return (
         <BrowserRouter>
-            <GlobalStyle>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/sign-up" element={<SignUp />} />
-                    <Route path="/sign-in" element={<SignIn />} />
-                </Routes>
-            </GlobalStyle>
+            <GlobalStyle />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/sign-in" element={<SignIn />} />
+            </Routes>
         </BrowserRouter>
     );
 };
