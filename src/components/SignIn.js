@@ -60,7 +60,7 @@ export default function SignIn() {
         });
         localStorage.setItem("token", data);
         setLoading(false);
-        navigate("/home");
+        navigate("/");
     };
 
     const signIn = (e) => {
