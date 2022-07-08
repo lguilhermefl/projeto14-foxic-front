@@ -8,13 +8,12 @@ import SignUp from "./SignUp";
 export default function App() {
     return (
         <BrowserRouter>
-            <GlobalStyle>
+            <GlobalStyle />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route path="/sign-in" element={<SignIn />} />
                 </Routes>
-            </GlobalStyle>
         </BrowserRouter>
     );
 };
