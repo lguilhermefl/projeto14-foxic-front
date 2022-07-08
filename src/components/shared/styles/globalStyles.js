@@ -58,6 +58,22 @@ const GlobalStyle = createGlobalStyle`
     a {
         text-decoration: none;
     }
+
+    button.btn-primary {
+        background-color: #00d8be;
+        color: #fff;
+        height: 45px;
+        border: none;
+        border-radius: 10px;
+        padding: 0 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    button.btn-primary:hover {
+        opacity: 0.8;
+    }
 `;
 
 export default GlobalStyle;
