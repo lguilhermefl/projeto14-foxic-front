@@ -59,6 +59,10 @@ const GlobalStyle = createGlobalStyle`
         text-decoration: none;
     }
 
+    .root {
+        width: 100%;
+    }
+
     button.btn-primary {
         background-color: #00d8be;
         color: #fff;
