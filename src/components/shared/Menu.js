@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useContext, useEffect, useState } from "react";
+import CartModal from './CartModal';
+import UserContext from './contexts/UserContext';
+import axios from 'axios';
 
 const Header = styled.div`
     
@@ -7,7 +11,7 @@ const Header = styled.div`
     left: 0;
     top: 0;
     width: 100%;
-    background-color: #fff;
+    background-color: #f9f9f9;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -61,24 +65,63 @@ const Header = styled.div`
 
 export default function Menu(){
 
+    const { userCart, setUserCart, user } = useContext(UserContext);
+    const [openedCartModal, setOpenedCartModal] = useState(false);
+
+    const openModal = () => setOpenedCartModal(true);
+    const closeModal = () => setOpenedCartModal(false);
+
+    useEffect(()=>{
+
+        if(!user.token) return;
+
+        (async ()=>{
+
+            try {
+                
+                const requestConfig = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+
+                const response = await axios.get('/carrinho', requestConfig);
+                setUserCart(response.data);
+
+            } catch (err) {
+                console.log(err);
+                alert('Ocorreu um erro ao carregar o seu carrinho.');
+            }
+
+        })();
+
+    }, []);
+
     return(
-        <Header>
-            <img src="https://big-skins.com/frontend/foxic-html-demo/images/skins/fashion/logo.webp" alt="Logomarca da loja" />
-            <nav>
-                <Link to="/">
-                    Início
-                </Link>
-                <Link to="/checkout">
-                    Checkout
-                </Link>
-            </nav>
-            <div className="header-icons">
-                <div className="cart">
-                    <ion-icon name="bag-handle-outline"></ion-icon>
-                    <span>2</span>
+        <>
+            <Header>
+                <img src="https://big-skins.com/frontend/foxic-html-demo/images/skins/fashion/logo.webp" alt="Logomarca da loja" />
+                <nav>
+                    <Link to="/">
+                        Início
+                    </Link>
+                    <Link to="/checkout">
+                        Checkout
+                    </Link>
+                </nav>
+                <div className="header-icons">
+                    <div className="cart" onClick={openModal}>
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+                        <span>{userCart.length}</span>
+                    </div>
                 </div>
-            </div>
-        </Header>
+            </Header>
+            {
+                openedCartModal ?
+                <CartModal closeModal={closeModal} /> :
+                null
+            }
+        </>
     );
 
 };

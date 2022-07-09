@@ -1,5 +1,8 @@
 import CartItem from "./CartItem";
 import styled from "styled-components";
+import { useContext } from "react";
+import { Link } from 'react-router-dom';
+import UserContext from "./contexts/UserContext";
 
 const Div = styled.div`
     
@@ -12,8 +15,8 @@ const Div = styled.div`
     height: 100%;
     background-color: #ffffff;
     align-items: center;
-    right: -500px;
-    display: none;
+    right: 0;
+    display: flex;
 
     .modal-header {
         display: flex;
@@ -23,6 +26,11 @@ const Div = styled.div`
         width: 100%;
         padding-right: 50px;
         align-items: end;
+        font-size: 40px;
+    }
+
+    .modal-header ion-icon:hover {
+        cursor: pointer;
     }
 
     .items-list {
@@ -33,6 +41,11 @@ const Div = styled.div`
         display: flex;
         justify-content: center;
         flex-direction: column;
+        padding-top: 280px;
+    }
+
+    .items-list h4 {
+        text-align: center;
     }
 
     .modal-footer {
@@ -51,8 +64,13 @@ const Div = styled.div`
         font-weight: bold;
     }
 
-    .modal-footer button {
+    .modal-footer a {
         margin: 0 50px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
     }
 
     .closed {
@@ -66,22 +84,27 @@ const Div = styled.div`
     }
 `;
 
-export default function CartModal(){
+export default function CartModal({ closeModal }){
+
+    const { userCart } = useContext(UserContext);
+    const cartTotal = userCart.reduce((prev, current) => prev + (current.value * current.qty), 0);
+
+    const cartItemsList = userCart.map(cartItem => <CartItem image={cartItem.image} name={cartItem.name} qty={cartItem.qty} value={cartItem.value} />);
 
     return(
         <Div className="closed">
 
             <div className="modal-header">
-                Fechar
+                <ion-icon name="close-circle-outline" onClick={closeModal}></ion-icon>
             </div>
 
             <div className="items-list">
 
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
+                {
+                    userCart.length > 0 ?
+                    cartItemsList :
+                    <h4>Você não possui itens adicionados ao carrinho :(</h4>
+                }
 
             </div>
 
@@ -89,12 +112,12 @@ export default function CartModal(){
 
                 <div className="subtotal">
                     <span>SubTotal</span>
-                    <span>R$ 9.999,99</span>
+                    <span>R$ {cartTotal}</span>
                 </div>
 
-                <button className="btn-primary">
+                <Link to="/checkout" className="btn-primary">
                     Checkout
-                </button>
+                </Link>
 
             </div>
 
