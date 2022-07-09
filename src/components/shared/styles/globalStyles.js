@@ -58,8 +58,12 @@ const GlobalStyle = createGlobalStyle`
     a {
         text-decoration: none;
     }
+    
+    .root {
+        width: 100%;
+    }
 
-    .btn-primary {
+    btn-primary {
         background-color: #00d8be;
         color: #fff;
         height: 45px;
