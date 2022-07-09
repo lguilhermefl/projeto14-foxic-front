@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
@@ -11,10 +11,12 @@ import SignUpOrSignIn from './shared/styles/SignUpOrSignIn';
 import Menu from './shared/Menu';
 import Advantages from './shared/Advantages';
 import Footer from './shared/Footer';
+import UserContext from "./shared/contexts/UserContext";
 
 export default function SignUp() {
 
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
 
     useEffect(() => {
         redirectsToHomeIfIsSignedIn(navigate);
@@ -85,6 +87,7 @@ export default function SignUp() {
         });
         localStorage.setItem("token", data);
         setLoading(false);
+        setUser({ token: data });
         navigate("/");
     };
 
