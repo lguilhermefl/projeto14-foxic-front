@@ -7,9 +7,14 @@ const Section = styled.section`
     background-color: #222;
     color: #fff;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     box-sizing: border-box;
     margin-top: 25px;
+
+    @media (min-width: 768px) {
+        flex-wrap: unset;
+    }
 
     .item {
         display: flex;
@@ -33,9 +38,9 @@ const Section = styled.section`
     }
 `;
 
-export default function Advantages(){
+export default function Advantages() {
 
-    return(
+    return (
         <Section>
 
             <div className="item">
