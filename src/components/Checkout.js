@@ -233,7 +233,7 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
     box-sizing: border-box;
-    border: 1px solid #f4f4f4;
+    border: 1px solid #e6e6e6;
     box-sizing: border-box;
     padding: 15px;
 `
@@ -253,7 +253,7 @@ const InputsBox = styled.div`
     width: 100%;
 
     input {
-        background: #f7f7f8;
+        background: #ececed;
         border-radius: 5px;
         height: 58px;
         box-sizing: border-box;
@@ -263,6 +263,20 @@ const InputsBox = styled.div`
         border: none;
         outline: none;
         width: 100%;
+    }
+
+    /* Remove input number arrows */ 
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+    -moz-appearance: textfield;
     }
 `
 
