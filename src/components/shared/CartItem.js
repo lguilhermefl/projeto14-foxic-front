@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from './contexts/UserContext';
 
@@ -24,6 +25,10 @@ const Div = styled.div`
         margin-bottom: 15px;
     }
 
+    .info h4:hover {
+        cursor: pointer;
+    }
+
     .info input {
         width: 25px;
         margin-top: 5px;
@@ -39,6 +44,7 @@ export default function CartItem({ image, name, qty, value }){
 
     const { userCart, setUserCart } = useContext(UserContext);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     function updateItemQty(itemName, e){
 
@@ -118,11 +124,15 @@ export default function CartItem({ image, name, qty, value }){
 
     }
 
+    function goToProductPage(productName){
+        navigate(`/produtos/${encodeURI(productName)}`);
+    }
+
     return(
         <Div>      
             <img src={image} alt="" />
             <div className="info">
-                <h4>{name}</h4>
+                <h4 onClick={() => goToProductPage(name)}>{name}</h4>
                 <h6>Quantidade: </h6>
                 <input type="number" value={qty} onChange={(e) => updateItemQty(name, e)} />
                 <h5>R$ {value}</h5>

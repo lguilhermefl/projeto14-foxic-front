@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useContext, useEffect, useState } from "react";
 import CartModal from './CartModal';
@@ -67,6 +67,7 @@ export default function Menu(){
 
     const { userCart, setUserCart, user } = useContext(UserContext);
     const [openedCartModal, setOpenedCartModal] = useState(false);
+    const navigate = useNavigate();
 
     const openModal = () => setOpenedCartModal(true);
     const closeModal = () => setOpenedCartModal(false);
@@ -97,6 +98,16 @@ export default function Menu(){
 
     }, []);
 
+    function goToCheckout(e){
+
+        if(!user.token) {
+            e.preventDefault();
+            alert('Você precisa estar logado para concluir seu pedido. Estamos te redirecionando para a página de login.');
+            navigate('/sign-in');
+        }
+
+    };
+
     return(
         <>
             <Header>
@@ -105,7 +116,7 @@ export default function Menu(){
                     <Link to="/">
                         Início
                     </Link>
-                    <Link to="/checkout">
+                    <Link to="/checkout" onClick={goToCheckout}>
                         Checkout
                     </Link>
                 </nav>
