@@ -9,6 +9,8 @@ import { API_URL } from './App';
 import Container from './shared/styles/Container.js';
 import SignUpOrSignIn from './shared/styles/SignUpOrSignIn.js';
 import Menu from './shared/Menu';
+import Advantages from './shared/Advantages';
+import Footer from './shared/Footer';
 
 export default function SignIn() {
 
@@ -85,21 +87,24 @@ export default function SignIn() {
     const signInForm = createSignInForm();
 
     return (
-        <Container>
-            <Menu></Menu>
-            <Column>
-                <Title>Entrar</Title>
-                <Form onSubmit={signIn}>{signInForm}</Form>
-                <Link to="/sign-up">
-                    <SignUpOrSignIn>Primeira vez? Cadastre-se!</SignUpOrSignIn>
-                </Link>
-            </Column>
-        </Container>
+        <>
+            <Menu />
+            <Container>
+                <Column>
+                    <Title>Entrar</Title>
+                    <Form onSubmit={signIn}>{signInForm}</Form>
+                    <Link to="/sign-up">
+                        <SignUpOrSignIn>Primeira vez? Cadastre-se!</SignUpOrSignIn>
+                    </Link>
+                </Column>
+            </Container>
+            <Advantages />
+            <Footer />
+        </>
     );
 };
 
 const Column = styled.div`
-    margin-top: 130px;
     width: 100%;
     padding: 0 15px;
     box-sizing: border-box;
@@ -110,9 +115,10 @@ const Column = styled.div`
 
 const Title = styled.h1`
     font-size: 1.5em;
-    font-weight: 700;
+    font-weight: 600;
     color: #282828;
     margin-bottom: 30px;
+    margin-top: 120px;
 `
 
 const Form = styled.form`
