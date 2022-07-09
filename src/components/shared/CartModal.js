@@ -1,7 +1,7 @@
 import CartItem from "./CartItem";
 import styled from "styled-components";
 import { useContext } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserContext from "./contexts/UserContext";
 
 const Div = styled.div`
@@ -86,10 +86,21 @@ const Div = styled.div`
 
 export default function CartModal({ closeModal }){
 
-    const { userCart } = useContext(UserContext);
+    const navigate = useNavigate();
+    const { userCart, user } = useContext(UserContext);
     const cartTotal = userCart.reduce((prev, current) => prev + (current.value * current.qty), 0);
 
     const cartItemsList = userCart.map(cartItem => <CartItem image={cartItem.image} name={cartItem.name} qty={cartItem.qty} value={cartItem.value} />);
+
+    function goToCheckout(e){
+
+        if(!user.token) {
+            e.preventDefault();
+            alert('Você precisa estar logado para concluir seu pedido. Estamos te redirecionando para a página de login.');
+            navigate('/sign-in');
+        }
+
+    };
 
     return(
         <Div className="closed">
@@ -115,7 +126,7 @@ export default function CartModal({ closeModal }){
                     <span>R$ {cartTotal}</span>
                 </div>
 
-                <Link to="/checkout" className="btn-primary">
+                <Link to="/checkout" onClick={goToCheckout} className="btn-primary">
                     Checkout
                 </Link>
 

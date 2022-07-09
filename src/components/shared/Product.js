@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from './contexts/UserContext';
 
@@ -47,6 +48,7 @@ export default function Product({ images, name, category, value }){
 
     const { userCart, setUserCart } = useContext(UserContext);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     function addToCart(images, name, value){
 
@@ -97,9 +99,13 @@ export default function Product({ images, name, category, value }){
 
     }
 
+    function goToProductPage(productName){
+        navigate(`/produtos/${encodeURI(productName)}`);
+    }
+
     return(
         <Div>
-            <div className="img">
+            <div className="img" onClick={() => goToProductPage(name)}>
                 <img src={images[0]} alt="" />
             </div>
             <div className="info">
@@ -111,7 +117,7 @@ export default function Product({ images, name, category, value }){
                     <ion-icon name="star"></ion-icon>
                 </div>
                 <p>{category}</p>
-                <h4>{name}</h4>
+                <h4 onClick={() => goToProductPage(name)}>{name}</h4>
                 <h6>R$ {value}</h6>
                 <button className="btn-primary" onClick={() => addToCart(images, name, value)}>Adicionar ao carrinho</button>
             </div>

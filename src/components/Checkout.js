@@ -10,9 +10,8 @@ import Menu from './shared/Menu';
 import Advantages from './shared/Advantages';
 import Footer from './shared/Footer';
 
-
-
 export default function Checkout() {
+
     const navigate = useNavigate();
 
     const [shippingAddress, setShippingAddress] = useState({
