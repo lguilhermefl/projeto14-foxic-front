@@ -65,7 +65,11 @@ export default function SignIn() {
         localStorage.setItem("token", data);
         setLoading(false);
         setUserToken({ token: data });
-        await axios.post(`${API_URL}/cart`, { cart: userCart }, { headers: { Authorization: `Bearer ${data}` } });
+        
+        if(userCart.length > 0){
+            await axios.post(`${API_URL}/cart`, { cart: userCart }, { headers: { Authorization: `Bearer ${data}` } });
+        }
+        
         navigate("/");
     };
 
