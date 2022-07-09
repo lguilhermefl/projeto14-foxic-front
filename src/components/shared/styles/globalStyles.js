@@ -49,7 +49,7 @@ const GlobalStyle = createGlobalStyle`
     //FIM RESET CSS
 
     body {
-        background: #FFFFFF;
+        background: #f9f9f9;
         font-family: Roboto, "Open Sans", sans-serif;
         display: flex;
         justify-content: center;
@@ -58,12 +58,12 @@ const GlobalStyle = createGlobalStyle`
     a {
         text-decoration: none;
     }
-
+    
     .root {
         width: 100%;
     }
 
-    button.btn-primary {
+    .btn-primary {
         background-color: #00d8be;
         color: #fff;
         height: 45px;
@@ -75,7 +75,7 @@ const GlobalStyle = createGlobalStyle`
         font-weight: bold;
     }
     
-    button.btn-primary:hover {
+    .btn-primary:hover {
         opacity: 0.8;
     }
 `;

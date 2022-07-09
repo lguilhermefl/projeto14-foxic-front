@@ -5,17 +5,25 @@ import Home from "./Home";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp.js";
 import Checkout from "./Checkout.js";
+import UserContext from "./shared/contexts/UserContext.js";
+import { useState } from "react";
 
 export default function App() {
+
+    const [user, setUser] = useState({});
+    const [userCart, setUserCart] = useState([]);
+
     return (
         <BrowserRouter>
             <GlobalStyle />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/sign-in" element={<SignIn />} />
-                <Route path="/checkout" element={<Checkout />} />
-            </Routes>
+            <UserContext.Provider value={{user, setUser, userCart, setUserCart}}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/sign-up" element={<SignUp />} />
+                    <Route path="/sign-in" element={<SignIn />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                </Routes>
+            </UserContext.Provider>
         </BrowserRouter>
     );
 };
