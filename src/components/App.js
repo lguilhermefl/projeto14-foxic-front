@@ -4,6 +4,7 @@ import GlobalStyle from "./shared/styles/globalStyles.js";
 import Home from "./Home";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp.js";
+import Checkout from "./Checkout.js";
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/checkout" element={<Checkout />} />
             </Routes>
         </BrowserRouter>
     );
