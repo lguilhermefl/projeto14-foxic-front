@@ -85,7 +85,7 @@ export default function Menu(){
                     }
                 }
 
-                const response = await axios.get('/carrinho', requestConfig);
+                const response = await axios.get('http://localhost:5000/cart', requestConfig);
                 setUserCart(response.data);
 
             } catch (err) {

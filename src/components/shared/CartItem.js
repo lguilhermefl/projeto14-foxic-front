@@ -68,7 +68,7 @@ export default function CartItem({ image, name, qty, value }){
                         }
                     }
 
-                    await axios.post('/carrinho', bodyData, requestConfig);
+                    await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
 
                 } catch (err) {
                     console.log(err);
@@ -105,7 +105,7 @@ export default function CartItem({ image, name, qty, value }){
                         }
                     }
 
-                    await axios.post('/carrinho', bodyData, requestConfig);
+                    await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
 
                 } catch (err) {
                     console.log(err);
