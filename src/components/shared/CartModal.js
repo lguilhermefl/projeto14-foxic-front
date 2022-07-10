@@ -82,6 +82,16 @@ const Div = styled.div`
         right: 0;
         display: flex;
     }
+
+    @media(max-width: 410px) {
+    
+        width: 100%;
+        
+        .modal-header {
+            height: 50px;
+        }
+    
+    }
 `;
 
 export default function CartModal({ closeModal }) {

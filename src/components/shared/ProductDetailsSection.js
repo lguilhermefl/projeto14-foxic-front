@@ -69,6 +69,35 @@ const Section = styled.section`
         letter-spacing: 3px;
     }
 
+    @media(max-width: 410px) {
+    
+        flex-wrap: wrap;
+    
+        .left-side {
+            width: 100%;
+            text-align: center;
+        }
+    
+        .right-side {
+            width: 100%;
+            text-align: center;
+        }
+    
+        .left-side img {
+            height: 350px;
+        }
+    
+        .right-side .actions {
+            justify-content: space-evenly;
+        }
+        
+        .right-side .actions button {
+            width: 70%;
+            letter-spacing: 1px;
+        }
+    
+    }
+
 `;
 
 export default function ProductDetailsSection({ productName }){

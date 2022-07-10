@@ -33,6 +33,20 @@ const Section = styled.section`
         justify-content: space-around;
     }
 
+    @media(max-width: 410px) {
+    
+        .products-list .product {
+            margin: 10px;
+            width: 200px;
+        }
+        
+        .products-list .product img {
+            height: 250px;
+            max-width: 200px;
+        }
+    
+    }
+
 `;
 
 export default function ProductsSection(){
