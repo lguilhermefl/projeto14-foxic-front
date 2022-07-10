@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { ThreeDots } from "react-loader-spinner";
 import { API_URL } from './App';
+import UserContext from "./shared/contexts/UserContext";
 
+import CartItem from "./shared/CartItem";
 import Container from './shared/styles/Container.js';
 import Menu from './shared/Menu';
 import Advantages from './shared/Advantages';
@@ -13,6 +15,11 @@ import Footer from './shared/Footer';
 export default function Checkout() {
 
     const navigate = useNavigate();
+
+    const { userCart, user } = useContext(UserContext);
+    const cartTotal = userCart.reduce((prev, current) => prev + (current.value * current.qty), 0);
+
+    const cartItemsList = userCart.map(cartItem => <CartItem image={cartItem.image} name={cartItem.name} qty={cartItem.qty} value={cartItem.value} />);
 
     const [shippingAddress, setShippingAddress] = useState({
         name: "",
@@ -54,7 +61,7 @@ export default function Checkout() {
                             disabled={loading}
                             required
                             type="text"
-                            maxLength="40"
+                            maxLength="19"
                             placeholder="Estado"
                             value={shippingAddress.state}
                             onChange={e => setShippingAddress({ ...shippingAddress, state: e.target.value })}
@@ -64,7 +71,7 @@ export default function Checkout() {
                         <input
                             disabled={loading}
                             required
-                            type="number"
+                            type="text"
                             maxLength="9"
                             placeholder="CEP"
                             value={shippingAddress.zipCode}
@@ -76,7 +83,7 @@ export default function Checkout() {
                     disabled={loading}
                     required
                     type="text"
-                    maxLength="50"
+                    maxLength="40"
                     placeholder="Rua ou Avenida"
                     value={shippingAddress.street}
                     onChange={e => setShippingAddress({ ...shippingAddress, street: e.target.value })}
@@ -85,7 +92,7 @@ export default function Checkout() {
                     disabled={loading}
                     required
                     type="text"
-                    maxLength="30"
+                    maxLength="20"
                     placeholder="Número e complemento"
                     value={shippingAddress.numberAndExtraInfo}
                     onChange={e => setShippingAddress({ ...shippingAddress, numberAndExtraInfo: e.target.value })}
@@ -109,8 +116,8 @@ export default function Checkout() {
                 <input
                     disabled={loading}
                     required
-                    type="number"
-                    maxLength="11"
+                    type="text"
+                    maxLength="14"
                     placeholder="CPF"
                     value={paymentInfo.cpf}
                     onChange={e => setPaymentInfo({ ...paymentInfo, cpf: e.target.value })}
@@ -143,31 +150,65 @@ export default function Checkout() {
         );
     };
 
-    const signInSuccess = (data) => {
-        // setUser({
-        //     name: "",
-        //     password: ""
-        // });
-        localStorage.setItem("token", data);
+    const orderSuccess = () => {
+        setShippingAddress({
+            name: "",
+            country: "Brasil",
+            state: "",
+            zipCode: "",
+            street: "",
+            numberAndExtraInfo: ""
+        });
+        setPaymentInfo({
+            creditCardNumber: "",
+            cpf: "",
+            validThru: "",
+            cvvCode: ""
+        });
         setLoading(false);
-        navigate("/");
+        window.scrollTo(0, 0);
+        navigate("/order-success");
     };
 
-    const signIn = (e) => {
+    const sendOrder = (e) => {
         e.preventDefault();
 
         setLoading(true);
 
-        const URL = `${API_URL}/sign-in`;
-        const userInfo = { ...shippingAddress };
+        const URL = `${API_URL}/orders`;
+        const token = localStorage.getItem("token");
+
+        const orderInfo = {
+            shippingAdress: {
+                name: shippingAddress.name,
+                country: "Brasil",
+                state: shippingAddress.state,
+                zipCode: shippingAddress.zipCode,
+                street: shippingAddress.street,
+                numberAndExtraInfo: shippingAddress.numberAndExtraInfo
+            },
+            paymentInfo: {
+                creditCardNumber: paymentInfo.creditCardNumber.toString(),
+                cpf: paymentInfo.cpf,
+                validThru: paymentInfo.validThru,
+                cvvCode: paymentInfo.cvvCode.toString()
+            },
+            orderSummary: userCart,
+            totalValue: cartTotal
+        };
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
 
         axios
-            .post(URL, userInfo)
-            .then(({ data }) => {
-                signInSuccess(data);
+            .post(URL, orderInfo, config)
+            .then(() => {
+                orderSuccess();
             })
             .catch(() => {
-                alert("Houve um erro em seu login, tente novamente por favor!");
+                alert("Preencha as informações corretamente por favor!");
                 setLoading(false);
             });
     };
@@ -175,12 +216,14 @@ export default function Checkout() {
     const shippingAddressFields = createShippingAddressFields();
     const paymentInfoFields = createPaymentInfoFields();
 
+    console.log(userCart);
+
     return (
         <>
             <Menu />
             <Container>
                 <Title>Fazer Pedido</Title>
-                <Form>
+                <Form onSubmit={sendOrder}>
                     <Wrapper>
                         <Card>
                             <TitleForm>Endereço de Entrega</TitleForm>
@@ -193,6 +236,25 @@ export default function Checkout() {
                             <InputsBox>{paymentInfoFields}</InputsBox>
                         </Card>
                     </Wrapper>
+                    <ColumnOrderDetais>
+                        <OrderDetails>Detalhes do Pedido</OrderDetails>
+                        <div className="items-list">
+                            {
+                                userCart.length > 0 ?
+                                    cartItemsList :
+                                    <h4>Você não possui itens adicionados ao carrinho :(</h4>
+                            }
+                        </div>
+                    </ColumnOrderDetais>
+                    <ColumnPlaceOrder>
+                        <RowPlaceOrder>
+                            <TotalOrderBox>
+                                <Total>Total</Total>
+                                <TotalOrderValue>R$ {cartTotal}</TotalOrderValue>
+                            </TotalOrderBox>
+                            <ButtonPlaceOrder>Fazer Pedido</ButtonPlaceOrder>
+                        </RowPlaceOrder>
+                    </ColumnPlaceOrder>
                 </Form>
             </Container>
             <Advantages />
@@ -226,9 +288,60 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     
     @media (min-width: 768px) {
-        padding: 15px;
+        padding: 0 15px;
         width: 50%;
     }
+`
+
+const ColumnOrderDetais = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    @media (min-width: 768px) {
+        padding: 0 15px;
+        width: calc((100%/3)*2);
+    }
+`
+
+const OrderDetails = styled.span`
+    font-weight: 500;
+    font-size: 1.4em;
+    color: #17c6aa;
+`
+
+const ColumnPlaceOrder = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    @media (min-width: 768px) {
+        padding: 0 15px;
+        width: calc((100%/3)*1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+`
+
+const RowPlaceOrder = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+`
+
+const TotalOrderBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
+
+const Total = styled.span`
+    font-size: 20px;
+`
+
+const TotalOrderValue = styled.span`
+    font-size: 2em;
+    color: #282828;
+    font-weight: 500;
 `
 
 const Card = styled.div`
@@ -243,6 +356,30 @@ const TitleForm = styled.h2`
     font-size: 1.4em;
     color: #282828;
     margin-bottom: 20px;
+`
+
+const ButtonPlaceOrder = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #17c6aa;
+    border-radius: 5px;
+    height: 45px;
+    padding: 15px 20px;
+    border: none;
+    margin-top: 15px;
+    width: 100%;
+    &:hover {
+        background: #212529;
+    }
+
+    @media (min-width: 1000px) {
+        padding: 15px 30px;
+    }
 `
 
 const InputsBox = styled.div`
