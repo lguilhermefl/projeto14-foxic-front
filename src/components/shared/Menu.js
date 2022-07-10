@@ -61,6 +61,18 @@ const Header = styled.div`
         justify-content: center;
         font-size: 9px;
     }
+
+    @media(max-width: 410px) {
+    
+        justify-content: space-between;
+        width: 100%;
+    
+        nav {
+            display: none;
+        }
+    
+    }
+
 `;
 
 export default function Menu(){
