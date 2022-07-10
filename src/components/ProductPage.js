@@ -1,4 +1,8 @@
 import { useParams } from "react-router-dom";
+import Advantages from "./shared/Advantages";
+import Footer from "./shared/Footer";
+import Menu from "./shared/Menu";
+import ProductDetailsSection from "./shared/ProductDetailsSection";
 
 export default function ProductPage(){
 
@@ -6,7 +10,10 @@ export default function ProductPage(){
 
     return(
         <>
-            <h1>{productName}</h1>
+            <Menu />
+            <ProductDetailsSection productName={productName} />
+            <Advantages />
+            <Footer />
         </>
     );
 
