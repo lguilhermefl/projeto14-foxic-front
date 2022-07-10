@@ -2,6 +2,7 @@ import Product from "./Product";
 import styled from 'styled-components';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import SectionTitle from "./SectionTitle";
 
 const Section = styled.section`
     
@@ -10,22 +11,6 @@ const Section = styled.section`
     flex-direction: column;
     align-items: center;
     width: 100%;
-
-    .section-title {
-        text-align: center;
-    }
-
-    .section-title h3 {
-        font-size: 28px;
-        font-weight: 500;
-        margin-bottom: 20px;
-    }
-
-    .section-title p {
-        opacity: 0.5;
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
 
     .products-list {
         display: flex;
@@ -73,11 +58,8 @@ export default function ProductsSection(){
 
     return (
         <Section>
-            
-            <div className="section-title">
-                <h3>Novos Produtos</h3>
-                <p>Estoque limitado!</p>
-            </div>
+
+            <SectionTitle title="Novos Produtos" description="Estoque limitado!" />
 
             <div className="products-list">
                 {products.map(product => <Product images={product.images} name={product.name} category={product.category} value={product.value}  />)}
