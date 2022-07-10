@@ -65,11 +65,11 @@ export default function SignIn() {
         localStorage.setItem("token", data);
         setLoading(false);
         setUserToken({ token: data });
-        
-        if(userCart.length > 0){
+
+        if (userCart.length > 0) {
             await axios.post(`${API_URL}/cart`, { cart: userCart }, { headers: { Authorization: `Bearer ${data}` } });
         }
-        
+
         navigate("/");
     };
 
@@ -138,7 +138,7 @@ const Form = styled.form`
     max-width: 400px;
 
     input {
-        background: #f7f7f8;
+        background: #ececed;
         border-radius: 5px;
         height: 58px;
         box-sizing: border-box;

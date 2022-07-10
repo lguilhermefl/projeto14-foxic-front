@@ -84,7 +84,7 @@ const Div = styled.div`
     }
 `;
 
-export default function CartModal({ closeModal }){
+export default function CartModal({ closeModal }) {
 
     const navigate = useNavigate();
     const { userCart, user } = useContext(UserContext);
@@ -92,17 +92,18 @@ export default function CartModal({ closeModal }){
 
     const cartItemsList = userCart.map(cartItem => <CartItem image={cartItem.image} name={cartItem.name} qty={cartItem.qty} value={cartItem.value} />);
 
-    function goToCheckout(e){
+    function goToCheckout(e) {
 
-        if(!user.token) {
+        if (!user.token) {
             e.preventDefault();
             alert('Você precisa estar logado para concluir seu pedido. Estamos te redirecionando para a página de login.');
+            window.scrollTo(0, 0);
             navigate('/sign-in');
         }
 
     };
 
-    return(
+    return (
         <Div className="closed">
 
             <div className="modal-header">
@@ -113,8 +114,8 @@ export default function CartModal({ closeModal }){
 
                 {
                     userCart.length > 0 ?
-                    cartItemsList :
-                    <h4>Você não possui itens adicionados ao carrinho :(</h4>
+                        cartItemsList :
+                        <h4>Você não possui itens adicionados ao carrinho :(</h4>
                 }
 
             </div>

@@ -177,7 +177,7 @@ const Form = styled.form`
     max-width: 400px;
 
     input {
-        background: #f7f7f8;
+        background: #ececed;
         border-radius: 5px;
         height: 58px;
         box-sizing: border-box;

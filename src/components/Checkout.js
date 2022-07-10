@@ -61,7 +61,7 @@ export default function Checkout() {
                             disabled={loading}
                             required
                             type="text"
-                            maxLength="40"
+                            maxLength="19"
                             placeholder="Estado"
                             value={shippingAddress.state}
                             onChange={e => setShippingAddress({ ...shippingAddress, state: e.target.value })}
@@ -71,7 +71,7 @@ export default function Checkout() {
                         <input
                             disabled={loading}
                             required
-                            type="number"
+                            type="text"
                             maxLength="9"
                             placeholder="CEP"
                             value={shippingAddress.zipCode}
@@ -83,7 +83,7 @@ export default function Checkout() {
                     disabled={loading}
                     required
                     type="text"
-                    maxLength="50"
+                    maxLength="40"
                     placeholder="Rua ou Avenida"
                     value={shippingAddress.street}
                     onChange={e => setShippingAddress({ ...shippingAddress, street: e.target.value })}
@@ -92,7 +92,7 @@ export default function Checkout() {
                     disabled={loading}
                     required
                     type="text"
-                    maxLength="30"
+                    maxLength="20"
                     placeholder="Número e complemento"
                     value={shippingAddress.numberAndExtraInfo}
                     onChange={e => setShippingAddress({ ...shippingAddress, numberAndExtraInfo: e.target.value })}
@@ -116,8 +116,8 @@ export default function Checkout() {
                 <input
                     disabled={loading}
                     required
-                    type="number"
-                    maxLength="11"
+                    type="text"
+                    maxLength="14"
                     placeholder="CPF"
                     value={paymentInfo.cpf}
                     onChange={e => setPaymentInfo({ ...paymentInfo, cpf: e.target.value })}
@@ -150,31 +150,65 @@ export default function Checkout() {
         );
     };
 
-    const signInSuccess = (data) => {
-        // setUser({
-        //     name: "",
-        //     password: ""
-        // });
-        localStorage.setItem("token", data);
+    const orderSuccess = () => {
+        setShippingAddress({
+            name: "",
+            country: "Brasil",
+            state: "",
+            zipCode: "",
+            street: "",
+            numberAndExtraInfo: ""
+        });
+        setPaymentInfo({
+            creditCardNumber: "",
+            cpf: "",
+            validThru: "",
+            cvvCode: ""
+        });
         setLoading(false);
-        navigate("/");
+        window.scrollTo(0, 0);
+        navigate("/order-success");
     };
 
-    const signIn = (e) => {
+    const sendOrder = (e) => {
         e.preventDefault();
 
         setLoading(true);
 
-        const URL = `${API_URL}/sign-in`;
-        const userInfo = { ...shippingAddress };
+        const URL = `${API_URL}/orders`;
+        const token = localStorage.getItem("token");
+
+        const orderInfo = {
+            shippingAdress: {
+                name: shippingAddress.name,
+                country: "Brasil",
+                state: shippingAddress.state,
+                zipCode: shippingAddress.zipCode,
+                street: shippingAddress.street,
+                numberAndExtraInfo: shippingAddress.numberAndExtraInfo
+            },
+            paymentInfo: {
+                creditCardNumber: paymentInfo.creditCardNumber.toString(),
+                cpf: paymentInfo.cpf,
+                validThru: paymentInfo.validThru,
+                cvvCode: paymentInfo.cvvCode.toString()
+            },
+            orderSummary: userCart,
+            totalValue: cartTotal
+        };
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
 
         axios
-            .post(URL, userInfo)
-            .then(({ data }) => {
-                signInSuccess(data);
+            .post(URL, orderInfo, config)
+            .then(() => {
+                orderSuccess();
             })
             .catch(() => {
-                alert("Houve um erro em seu login, tente novamente por favor!");
+                alert("Preencha as informações corretamente por favor!");
                 setLoading(false);
             });
     };
@@ -182,12 +216,14 @@ export default function Checkout() {
     const shippingAddressFields = createShippingAddressFields();
     const paymentInfoFields = createPaymentInfoFields();
 
+    console.log(userCart);
+
     return (
         <>
             <Menu />
             <Container>
                 <Title>Fazer Pedido</Title>
-                <Form>
+                <Form onSubmit={sendOrder}>
                     <Wrapper>
                         <Card>
                             <TitleForm>Endereço de Entrega</TitleForm>
