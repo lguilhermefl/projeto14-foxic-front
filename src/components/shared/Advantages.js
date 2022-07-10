@@ -46,24 +46,24 @@ export default function Advantages() {
             <div className="item">
                 <ion-icon name="albums-outline"></ion-icon>
                 <div className="description">
-                    <h6>Lorem ipsum</h6>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore soluta beatae quisquam sint laborum inventore esse.</p>
+                    <h6>Entrega Rápida</h6>
+                    <p>Seus itens serão entregues em até 5 dias úteis quando estiverem disponíveis e prontos para entrega.</p>
                 </div>
             </div>
 
             <div className="item">
                 <ion-icon name="pricetags-outline"></ion-icon>
                 <div className="description">
-                    <h6>Lorem ipsum</h6>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore soluta beatae quisquam sint laborum inventore esse.</p>
+                    <h6>Melhor Preço</h6>
+                    <p>Nossos preços são melhores que em qualquer outra loja, seja online ou local.</p>
                 </div>
             </div>
 
             <div className="item">
                 <ion-icon name="card-outline"></ion-icon>
                 <div className="description">
-                    <h6>Lorem ipsum</h6>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore soluta beatae quisquam sint laborum inventore esse.</p>
+                    <h6>Garantia</h6>
+                    <p>Todos os nossos produtos possuem garantia de pelo menos 6 meses.</p>
                 </div>
             </div>
 

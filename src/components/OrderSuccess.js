@@ -1,12 +1,13 @@
 import Menu from './shared/Menu';
 import Advantages from './shared/Advantages';
 import Footer from './shared/Footer';
+import SuccessOrderSection from './shared/SuccessOrderSection';
 
 export default function orderSuccess() {
     return (
         <>
             <Menu />
-            <h1>PEDIDO REALIZADO COM SUCESSO!</h1>
+            <SuccessOrderSection />
             <Advantages />
             <Footer />
         </>
