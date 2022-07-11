@@ -16,7 +16,6 @@ import UserContext from "./shared/contexts/UserContext";
 export default function SignUp() {
 
     const navigate = useNavigate();
-    const { setUser } = useContext(UserContext);
 
     useEffect(() => {
         redirectsToHomeIfIsSignedIn(navigate);
@@ -87,7 +86,6 @@ export default function SignUp() {
         });
         localStorage.setItem("token", data);
         setLoading(false);
-        setUser({ token: data });
         navigate("/");
     };
 
@@ -102,6 +100,7 @@ export default function SignUp() {
             .post(URL, user)
             .then(({ data }) => {
                 signInSuccess(data);
+                console.log("token armazenado");
             })
             .catch(() => {
                 alert("Houve um erro em seu login automático, você será redirecionado para o login!");
