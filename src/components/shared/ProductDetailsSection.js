@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import UserContext from "./contexts/UserContext";
+import { API_URL } from '../App';
 
 const Section = styled.section`
 
@@ -100,25 +101,26 @@ const Section = styled.section`
 
 `;
 
-export default function ProductDetailsSection({ productName }){
+export default function ProductDetailsSection({ productName }) {
 
     const [product, setProduct] = useState({});
     const [qty, setQty] = useState(1);
     const { user, userCart, setUserCart } = useContext(UserContext);
+    const token = localStorage.getItem("token");
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        (async ()=>{
+        (async () => {
 
             try {
-                
+
                 const requestConfig = {
                     headers: {
-                        Authorization: `Bearer ${user.token}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
 
-                const response = await axios.get(`http://localhost:5000/products/${productName}`, requestConfig);
+                const response = await axios.get(`${API_URL}/products/${productName}`, requestConfig);
 
                 setProduct(response.data);
 
@@ -131,12 +133,12 @@ export default function ProductDetailsSection({ productName }){
 
     }, []);
 
-    function addToCart(){
+    function addToCart() {
 
         const newCart = [...userCart];
         const itemFound = newCart.find(item => item.name === product.name);
 
-        if(itemFound){
+        if (itemFound) {
 
             itemFound.qty = qty;
 
@@ -148,28 +150,28 @@ export default function ProductDetailsSection({ productName }){
                 qty,
                 value: product.value
             };
-            
+
             newCart.push(cartItem);
 
         }
 
         setUserCart(newCart);
 
-        (async ()=>{
+        (async () => {
 
             try {
-                
+
                 const bodyData = {
                     cart: newCart
                 };
 
                 const requestConfig = {
                     headers: {
-                        Authorization: `Bearer ${user.token}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
 
-                await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
+                await axios.post(`${API_URL}/cart`, bodyData, requestConfig);
 
             } catch (err) {
                 console.log(err);
@@ -180,7 +182,7 @@ export default function ProductDetailsSection({ productName }){
 
     }
 
-    return(
+    return (
         <Section>
 
             <div className="left-side">

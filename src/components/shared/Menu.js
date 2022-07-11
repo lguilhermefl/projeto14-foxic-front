@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import CartModal from './CartModal';
 import UserContext from './contexts/UserContext';
 import axios from 'axios';
+import { API_URL } from '../App';
 
 const Header = styled.div`
     
@@ -30,6 +31,7 @@ const Header = styled.div`
         color: #222;
         text-decoration: none;
         font-size: 18px;
+        cursor: pointer;
     }
 
     nav a:hover {
@@ -66,39 +68,34 @@ const Header = styled.div`
     
         justify-content: space-between;
         width: 100%;
-    
-        nav {
-            display: none;
-        }
-    
     }
 
 `;
 
-export default function Menu(){
+export default function Menu() {
 
-    const { userCart, setUserCart, user } = useContext(UserContext);
+    const { userCart, setUserCart } = useContext(UserContext);
     const [openedCartModal, setOpenedCartModal] = useState(false);
+    const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
     const openModal = () => setOpenedCartModal(true);
     const closeModal = () => setOpenedCartModal(false);
 
-    useEffect(()=>{
+    useEffect(() => {
+        if (!token) return;
 
-        if(!user.token) return;
-
-        (async ()=>{
+        (async () => {
 
             try {
-                
+
                 const requestConfig = {
                     headers: {
-                        Authorization: `Bearer ${user.token}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
 
-                const response = await axios.get('http://localhost:5000/cart', requestConfig);
+                const response = await axios.get(`${API_URL}/cart`, requestConfig);
                 setUserCart(response.data);
 
             } catch (err) {
@@ -110,28 +107,51 @@ export default function Menu(){
 
     }, []);
 
-    function goToCheckout(e){
+    const userLogout = () => {
 
-        if(!user.token) {
-            e.preventDefault();
-            alert('Você precisa estar logado para concluir seu pedido. Estamos te redirecionando para a página de login.');
-            navigate('/sign-in');
-        }
-
+        if (window.confirm("Você realmente quer sair?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        };
     };
 
-    return(
+    const createNavMenu = () => {
+
+        const signInAndSignUp = (
+            <>
+                <Link to="/sign-in">
+                    Entrar
+                </Link>
+                <Link to="/sign-up">
+                    Cadastrar
+                </Link>
+            </>
+        );
+        const logout = (
+            <>
+                <a onClick={userLogout}>
+                    Sair
+                </a>
+            </>
+        );
+        return (
+            <nav>
+                {
+                    !token ? signInAndSignUp : logout
+                }
+            </nav>
+        );
+    };
+
+    const navMenu = createNavMenu();
+
+    return (
         <>
             <Header>
-                <img src="https://big-skins.com/frontend/foxic-html-demo/images/skins/fashion/logo.webp" alt="Logomarca da loja" />
-                <nav>
-                    <Link to="/">
-                        Início
-                    </Link>
-                    <Link to="/checkout" onClick={goToCheckout}>
-                        Checkout
-                    </Link>
-                </nav>
+                <Link to="/">
+                    <img src="https://big-skins.com/frontend/foxic-html-demo/images/skins/fashion/logo.webp" alt="Logomarca da loja" />
+                </Link>
+                {navMenu}
                 <div className="header-icons">
                     <div className="cart" onClick={openModal}>
                         <ion-icon name="bag-handle-outline"></ion-icon>
@@ -141,8 +161,8 @@ export default function Menu(){
             </Header>
             {
                 openedCartModal ?
-                <CartModal closeModal={closeModal} /> :
-                null
+                    <CartModal closeModal={closeModal} /> :
+                    null
             }
         </>
     );

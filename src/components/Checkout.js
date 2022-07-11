@@ -16,7 +16,7 @@ export default function Checkout() {
 
     const navigate = useNavigate();
 
-    const { userCart, user } = useContext(UserContext);
+    const { userCart } = useContext(UserContext);
     const cartTotal = userCart.reduce((prev, current) => prev + (current.value * current.qty), 0);
 
     const cartItemsList = userCart.map(cartItem => <CartItem image={cartItem.image} name={cartItem.name} qty={cartItem.qty} value={cartItem.value} />);
@@ -73,7 +73,7 @@ export default function Checkout() {
                             required
                             type="text"
                             maxLength="9"
-                            placeholder="CEP"
+                            placeholder="CEP (XXXXX-XXX)"
                             value={shippingAddress.zipCode}
                             onChange={e => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
                         />
@@ -118,7 +118,7 @@ export default function Checkout() {
                     required
                     type="text"
                     maxLength="14"
-                    placeholder="CPF"
+                    placeholder="CPF (XXX.XXX.XXX-XX)"
                     value={paymentInfo.cpf}
                     onChange={e => setPaymentInfo({ ...paymentInfo, cpf: e.target.value })}
                 />
@@ -141,8 +141,8 @@ export default function Checkout() {
                             type="number"
                             maxLength="3"
                             placeholder="Código de segurança"
-                            value={shippingAddress.cvvCode}
-                            onChange={e => setShippingAddress({ ...shippingAddress, cvvCode: e.target.value })}
+                            value={paymentInfo.cvvCode}
+                            onChange={e => setPaymentInfo({ ...paymentInfo, cvvCode: e.target.value })}
                         />
                     </Row>
                 </BoxSmallInputs>
@@ -215,8 +215,6 @@ export default function Checkout() {
 
     const shippingAddressFields = createShippingAddressFields();
     const paymentInfoFields = createPaymentInfoFields();
-
-    console.log(userCart);
 
     return (
         <>

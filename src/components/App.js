@@ -9,16 +9,17 @@ import ProductPage from './ProductPage.js';
 import OrderSuccess from "./OrderSuccess.js";
 import UserContext from "./shared/contexts/UserContext.js";
 import { useState } from "react";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default function App() {
 
-    const [user, setUser] = useState({});
     const [userCart, setUserCart] = useState([]);
 
     return (
         <BrowserRouter>
             <GlobalStyle />
-            <UserContext.Provider value={{ user, setUser, userCart, setUserCart }}>
+            <UserContext.Provider value={{ userCart, setUserCart }}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/sign-up" element={<SignUp />} />
@@ -32,4 +33,4 @@ export default function App() {
     );
 };
 
-export const API_URL = "http://localhost:5000";
+export const API_URL = process.env.REACT_APP_API_BASE_URL;

@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from './contexts/UserContext';
+import { API_URL } from '../App';
 
 const Div = styled.div`
     
@@ -40,41 +41,41 @@ const Div = styled.div`
     }
 `;
 
-export default function CartItem({ image, name, qty, value }){
+export default function CartItem({ image, name, qty, value }) {
 
     const { userCart, setUserCart } = useContext(UserContext);
-    const { user } = useContext(UserContext);
+    const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
-    function updateItemQty(itemName, e){
+    function updateItemQty(itemName, e) {
 
         const newQty = parseInt(e.target.value);
 
-        if(newQty < 0) return;
+        if (newQty < 0) return;
 
         const itemFound = userCart.find(item => item.name === itemName);
 
-        if(itemFound) {
+        if (itemFound) {
 
             itemFound.qty = newQty;
             const newCart = [...userCart];
             setUserCart(newCart);
-            
-            (async ()=>{
+
+            (async () => {
 
                 try {
-                    
+
                     const bodyData = {
                         cart: newCart
                     };
 
                     const requestConfig = {
                         headers: {
-                            Authorization: `Bearer ${user.token}`
+                            Authorization: `Bearer ${token}`
                         }
                     }
 
-                    await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
+                    await axios.post(`${API_URL}/cart`, bodyData, requestConfig);
 
                 } catch (err) {
                     console.log(err);
@@ -87,31 +88,31 @@ export default function CartItem({ image, name, qty, value }){
 
     }
 
-    function removeItem(itemName){
+    function removeItem(itemName) {
 
         const itemFoundIndex = userCart.findIndex(item => item.name === itemName);
 
-        if(itemFoundIndex > -1){
+        if (itemFoundIndex > -1) {
 
             const newCart = [...userCart];
             newCart.splice(itemFoundIndex, 1);
             setUserCart(newCart);
-            
-            (async ()=>{
+
+            (async () => {
 
                 try {
-                    
+
                     const bodyData = {
                         cart: newCart
                     };
 
                     const requestConfig = {
                         headers: {
-                            Authorization: `Bearer ${user.token}`
+                            Authorization: `Bearer ${token}`
                         }
                     }
 
-                    await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
+                    await axios.post(`${API_URL}/cart`, bodyData, requestConfig);
 
                 } catch (err) {
                     console.log(err);
@@ -124,12 +125,12 @@ export default function CartItem({ image, name, qty, value }){
 
     }
 
-    function goToProductPage(productName){
+    function goToProductPage(productName) {
         navigate(`/produtos/${encodeURI(productName)}`);
     }
 
-    return(
-        <Div>      
+    return (
+        <Div>
             <img src={image} alt="" />
             <div className="info">
                 <h4 onClick={() => goToProductPage(name)}>{name}</h4>

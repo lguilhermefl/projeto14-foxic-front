@@ -16,7 +16,7 @@ import UserContext from './shared/contexts/UserContext';
 export default function SignIn() {
 
     const navigate = useNavigate();
-    const { setUser: setUserToken, userCart, setUserCart } = useContext(UserContext);
+    const { userCart } = useContext(UserContext);
 
     useEffect(() => {
         redirectsToHomeIfIsSignedIn(navigate);
@@ -64,10 +64,10 @@ export default function SignIn() {
         });
         localStorage.setItem("token", data);
         setLoading(false);
-        setUserToken({ token: data });
+        const token = data;
 
         if (userCart.length > 0) {
-            await axios.post(`${API_URL}/cart`, { cart: userCart }, { headers: { Authorization: `Bearer ${data}` } });
+            await axios.post(`${API_URL}/cart`, { cart: userCart }, { headers: { Authorization: `Bearer ${token}` } });
         }
 
         navigate("/");

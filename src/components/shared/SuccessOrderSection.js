@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import SectionTitle from "./SectionTitle";
+import { Link } from "react-router-dom";
 
 const Section = styled.section`
     
@@ -58,38 +59,20 @@ const Section = styled.section`
 
 `;
 
-export default function SuccessOrderSection(){
+export default function SuccessOrderSection() {
 
-    return(
+    return (
         <Section>
 
-            <SectionTitle title="Pedido Finalizado!" description="Abaixo você confere um resumo do pedido" />
+            <SectionTitle title="Pedido Finalizado!" />
 
             <div class="order-info">
 
-                <p>Obrigado por comprar na nossa loja! Seu pedido foi feito com sucesso e já vamos enviá-lo. Abaixo você visualiza dados da compra.</p>
+                <p>Obrigado por comprar na nossa loja! Seu pedido foi feito com sucesso e já vamos enviá-lo.</p>
 
-                <table>
-                    <thead>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Valor</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Produto 01</td>
-                            <td>10</td>
-                            <td>R$ 250,00</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3">Total: R$ 500,00</td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <button class="btn-primary">Página Inicial</button>
+                <Link to="/">
+                    <button class="btn-primary">Página Inicial</button>
+                </Link>
 
             </div>
 

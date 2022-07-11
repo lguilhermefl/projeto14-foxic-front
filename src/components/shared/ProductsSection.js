@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SectionTitle from "./SectionTitle";
+import { API_URL } from '../App';
 
 const Section = styled.section`
     
@@ -34,17 +35,17 @@ const Section = styled.section`
 
 `;
 
-export default function ProductsSection(){
+export default function ProductsSection() {
 
     const [products, setProducts] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        (async ()=>{
+        (async () => {
 
             try {
-                
-                const response = await axios.get('http://localhost:5000/products');
+
+                const response = await axios.get(`${API_URL}/products`);
                 setProducts(response.data);
 
             } catch (err) {
@@ -62,9 +63,9 @@ export default function ProductsSection(){
             <SectionTitle title="Novos Produtos" description="Estoque limitado!" />
 
             <div className="products-list">
-                {products.map(product => <Product images={product.images} name={product.name} category={product.category} value={product.value}  />)}
+                {products.map(product => <Product images={product.images} name={product.name} category={product.category} value={product.value} />)}
             </div>
-            
+
         </Section>
     );
 

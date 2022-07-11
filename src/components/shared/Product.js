@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from './contexts/UserContext';
+import { API_URL } from '../App';
 
 const Div = styled.div`
     
@@ -44,18 +45,18 @@ const Div = styled.div`
     }
 `;
 
-export default function Product({ images, name, category, value }){
+export default function Product({ images, name, category, value }) {
 
     const { userCart, setUserCart } = useContext(UserContext);
-    const { user } = useContext(UserContext);
+    const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
-    function addToCart(images, name, value){
+    function addToCart(images, name, value) {
 
         const newCart = [...userCart];
         const itemFound = newCart.find(item => item.name === name);
 
-        if(itemFound){
+        if (itemFound) {
 
             itemFound.qty++;
 
@@ -67,28 +68,28 @@ export default function Product({ images, name, category, value }){
                 qty: 1,
                 value
             };
-            
+
             newCart.push(cartItem);
 
         }
 
         setUserCart(newCart);
 
-        (async ()=>{
+        (async () => {
 
             try {
-                
+
                 const bodyData = {
                     cart: newCart
                 };
 
                 const requestConfig = {
                     headers: {
-                        Authorization: `Bearer ${user.token}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
 
-                await axios.post('http://localhost:5000/cart', bodyData, requestConfig);
+                await axios.post(`${API_URL}/cart`, bodyData, requestConfig);
 
             } catch (err) {
                 console.log(err);
@@ -99,11 +100,11 @@ export default function Product({ images, name, category, value }){
 
     }
 
-    function goToProductPage(productName){
+    function goToProductPage(productName) {
         navigate(`/produtos/${encodeURI(productName)}`);
     }
 
-    return(
+    return (
         <Div>
             <div className="img" onClick={() => goToProductPage(name)}>
                 <img src={images[0]} alt="" />
